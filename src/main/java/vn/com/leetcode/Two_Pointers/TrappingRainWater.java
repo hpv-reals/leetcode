@@ -18,28 +18,28 @@ public class TrappingRainWater {
 
         int minus = 0;
 
-        while (currentIndex < height.length - 1) {
-            int currentNumber = height[currentIndex];
-            if (currentNumber == 0 && isDraft) {
-                continue;
-            } else {
-               if (currentNumber == 0) {
-                    minus += currentNumber;
-               } else {
-                   if (!startSum && height[currentIndex + 1] == 0) {
-                       startSum = true;
-                       startIndexSum = currentIndex;
-                       continue;
-                   }
-                   if (startSum) {
-                       currentInde
-                   }
-                   isDraft = false;
-               }
-            }
-
-            currentIndex++;
-        }
+//        while (currentIndex < height.length - 1) {
+//            int currentNumber = height[currentIndex];
+//            if (currentNumber == 0 && isDraft) {
+//                continue;
+//            } else {
+//               if (currentNumber == 0) {
+//                    minus += currentNumber;
+//               } else {
+//                   if (!startSum && height[currentIndex + 1] == 0) {
+//                       startSum = true;
+//                       startIndexSum = currentIndex;
+//                       continue;
+//                   }
+//                   if (startSum) {
+//                       currentInde
+//                   }
+//                   isDraft = false;
+//               }
+//            }
+//
+//            currentIndex++;
+//        }
         return total;
     }
 
