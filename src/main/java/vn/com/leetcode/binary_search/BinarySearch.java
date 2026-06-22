@@ -4,8 +4,8 @@ public class BinarySearch {
 
     /**
      * Level: Easy
-     * Start: 16:37 19/06/2026
-     * End: 16:48 19/06/2026
+     * Start: 16:37 21/06/2026
+     * End: 16:48 21/06/2026
      */
     public int search(int[] nums, int target) {
         int result = -1;
@@ -29,8 +29,8 @@ public class BinarySearch {
 
     /**
      * Level: Medium
-     * Start: 16:50 19/06/2026
-     * End: 17:13 19/06/2026
+     * Start: 16:50 21/06/2026
+     * End: 17:13 21/06/2026
      */
     public boolean searchMatrix(int[][] matrix, int target) {
         boolean result = false;
@@ -74,8 +74,8 @@ public class BinarySearch {
 
     /**
      * Level: Medium
-     * Start: 17:24 19/06/2026
-     * End:  19/06/2026
+     * Start: 17:24 21/06/2026
+     * End: 17:54 21/06/2026
      */
     public int minEatingSpeed(int[] piles, int h) {
         int lastValue = 0;
@@ -92,17 +92,75 @@ public class BinarySearch {
             } else {
                 left = mid + 1;
             }
-
-
         }
-
         return lastValue;
+    }
+
+    /**
+     * Level: Medium
+     * Start: 10:03 22/06/2026
+     * End: 10:50 22/06/2026
+     */
+    public int findMin(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return nums[left];
+    }
+
+    /**
+     * Level: Medium
+     * Start: 10:55 22/06/2026
+     * End:  22/06/2026
+     */
+    public int search2(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            // Trường hợp 1: Nửa TỪ LEFT ĐẾN MID đã sắp xếp chuẩn
+            if (nums[left] <= nums[mid]) {
+                if (target >= nums[left] && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                // Trường hợp 2: Nửa TỪ MID ĐẾN RIGHT đã sắp xếp chuẩn
+                if (target > nums[mid] && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
     }
 
     public static void main(String[] args) {
         BinarySearch binarySearch = new BinarySearch();
-        int[] nums = {25,10,23,4};
+        int[] nums = {5,6,7,8,9,0,1,2,3,4}; // case 1
 
-        System.out.println(binarySearch.minEatingSpeed(nums, 4));
+        System.out.println(binarySearch.search2(nums, -4));
+        System.out.println(binarySearch.search2(nums, 10));
+        System.out.println(binarySearch.search2(nums, 0));
+        System.out.println(binarySearch.search2(nums, 1));
+        System.out.println(binarySearch.search2(nums, 2));
+        System.out.println(binarySearch.search2(nums, 3));
+        System.out.println(binarySearch.search2(nums, 4));
+        System.out.println(binarySearch.search2(nums, 5));
+        System.out.println(binarySearch.search2(nums, 6));
+        System.out.println(binarySearch.search2(nums, 7));
+        System.out.println(binarySearch.search2(nums, 8));
+        System.out.println(binarySearch.search2(nums, 9));
     }
 }
