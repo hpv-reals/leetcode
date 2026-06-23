@@ -146,21 +146,24 @@ public class BinarySearch {
         return -1;
     }
 
+    /**
+     * Level: Medium
+     * Start: 13:49 23/06/2026
+     * End:  23/06/2026
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        double result = 0.0;
+
+
+
+        return result;
+    }
+
     public static void main(String[] args) {
         BinarySearch binarySearch = new BinarySearch();
-        int[] nums = {5,6,7,8,9,0,1,2,3,4}; // case 1
+        int[] nums1 = {1,2};
+        int[] nums2 = {3};
 
-        System.out.println(binarySearch.search2(nums, -4));
-        System.out.println(binarySearch.search2(nums, 10));
-        System.out.println(binarySearch.search2(nums, 0));
-        System.out.println(binarySearch.search2(nums, 1));
-        System.out.println(binarySearch.search2(nums, 2));
-        System.out.println(binarySearch.search2(nums, 3));
-        System.out.println(binarySearch.search2(nums, 4));
-        System.out.println(binarySearch.search2(nums, 5));
-        System.out.println(binarySearch.search2(nums, 6));
-        System.out.println(binarySearch.search2(nums, 7));
-        System.out.println(binarySearch.search2(nums, 8));
-        System.out.println(binarySearch.search2(nums, 9));
+        System.out.println(binarySearch.findMedianSortedArrays(nums1, nums2));
     }
 }
