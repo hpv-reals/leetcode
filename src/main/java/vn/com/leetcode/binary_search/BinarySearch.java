@@ -148,7 +148,7 @@ public class BinarySearch {
 
     /**
      * Level: Medium
-     * Start: 13:49 23/06/2026
+     * Start: 23/06/2026
      * End:  23/06/2026
      */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
