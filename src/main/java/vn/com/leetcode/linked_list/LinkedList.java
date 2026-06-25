@@ -122,6 +122,25 @@ public class LinkedList {
         return dummy.next;
     }
 
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        int length = lists.length;
+        int step = 1;
+        while (step < length) {
+            for (int i = 0; i < length - step; i += 2 * step) {
+                if (i + step > length - 1) {
+                    continue;
+                }
+                lists[i] = mergeTwoLists(lists[i], lists[i + step]);
+            }
+            step = step * 2;
+        }
+        return lists[0];
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         LinkedList solution = new LinkedList();
