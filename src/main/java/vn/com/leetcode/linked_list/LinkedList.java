@@ -1,6 +1,7 @@
 package vn.com.leetcode.linked_list;
 
 import java.util.List;
+import jdk.nashorn.internal.ir.LiteralNode;
 
 public class LinkedList {
 
@@ -141,36 +142,119 @@ public class LinkedList {
         return lists[0];
     }
 
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+
+        ListNode groupPrev = dummy;
+        ListNode current = head;
+        while (current != null) {
+            ListNode temp = current;
+            for (int i = 0; i < k; i++) {
+                if (temp == null) {
+                    return dummy.next;
+                }
+                temp = temp.next;
+            }
+
+            ListNode preNode = temp;
+            ListNode currentTemp = current;
+            for (int i = 0; i < k; i++) {
+                ListNode nextNode = currentTemp.next;
+                currentTemp.next = preNode;
+                preNode = currentTemp;
+                currentTemp = nextNode;
+            }
+
+
+            ListNode nextGroupPrev = groupPrev.next;
+            groupPrev.next = preNode;
+
+            groupPrev = nextGroupPrev;
+            current = currentTemp;
+        }
+        return dummy.next;
+    }
+
+
+    public int findDuplicate(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];
+
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode temp = dummy;
+        int tempVal = 0;
+        int tempDiv = 0;
+        while (l1 != null || l2 != null) {
+            int l1Val = l1 == null ? 0 : l1.val;
+            int l2Val = l2 == null ? 0 : l2.val;
+
+            int sum = l1Val + l2Val + tempDiv;
+            tempVal = sum % 10;
+            tempDiv = sum / 10;
+            temp.next = new ListNode(tempVal);
+            temp = temp.next;
+            if (l1 != null) {
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                l2 = l2.next;
+            }
+        }
+
+        if (tempDiv > 0) {
+            temp.next = new ListNode(tempDiv);
+        }
+
+        return dummy.next;
+    }
+
+    public static class Node {
+        int val;
+        Node next;
+        Node random;
+
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
+    }
+
+
+    public Node copyRandomList(Node head) {
+
+
+
+        return null;
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         LinkedList solution = new LinkedList();
 
-        System.out.println("\n========== TEST REMOVE NTH NODE FROM END ==========");
-
         // Test case 1: Xóa node bình thường ở giữa
-        ListNode rmList1 = createList(new int[]{1, 2, 3, 4, 5});
-        System.out.print("Test 1 - Xóa thứ 2 từ cuối [1,2,3,4,5]: ");
-        printList(solution.removeNthFromEnd(rmList1, 2)); // Kỳ vọng: 1 -> 2 -> 3 -> 5 -> null
+        ListNode rmList1 = createList(new int[]{9,9,9,9,9,9,9});
+        ListNode rmList2 = createList(new int[]{9,9,9,9});
+        printList(solution.addTwoNumbers(rmList1, rmList2));
 
-        // Test case 2: Danh sách chỉ có 1 phần tử (Trường hợp rất dễ gây NullPointerException)
-        ListNode rmList2 = createList(new int[]{5});
-        System.out.print("Test 2 - Xóa thứ 1 từ cuối [5]:         ");
-        printList(solution.removeNthFromEnd(rmList2, 1)); // Kỳ vọng: null
 
-        // Test case 3: Xóa đúng node đầu tiên (head)
-        ListNode rmList3 = createList(new int[]{1, 2});
-        System.out.print("Test 3 - Xóa thứ 2 từ cuối [1,2]:       ");
-        printList(solution.removeNthFromEnd(rmList3, 2)); // Kỳ vọng: 2 -> null
-
-        // Test case 4: Xóa đúng node cuối cùng (tail)
-        ListNode rmList4 = createList(new int[]{1, 2});
-        System.out.print("Test 4 - Xóa thứ 1 từ cuối [1,2]:       ");
-        printList(solution.removeNthFromEnd(rmList4, 1)); // Kỳ vọng: 1 -> null
-
-        // Test case 5: Danh sách 3 phần tử, xóa phần tử giữa
-        ListNode rmList5 = createList(new int[]{1, 2, 3});
-        System.out.print("Test 5 - Xóa thứ 2 từ cuối [1,2,3]:     ");
-        printList(solution.removeNthFromEnd(rmList5, 2)); // Kỳ vọng: 1 -> 3 -> null
     }
 
     // 1. Hàm tạo LinkedList từ Array
