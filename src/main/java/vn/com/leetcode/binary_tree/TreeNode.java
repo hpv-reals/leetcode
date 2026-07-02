@@ -120,11 +120,60 @@ public class TreeNode {
         return output;
     }
 
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (root.val > p.val && root.val > q.val) {
+                root = root.left;
+            } else if (root.val < p.val && root.val < q.val) {
+                root = root.right;
+            } else {
+                return root;
+            }
+        }
+        return null;
+    }
+
+    public int goodNodes(TreeNode root) {
+        return dfs(root, Integer.MIN_VALUE);
+    }
+    public int dfs(TreeNode root, int maxSoFar) {
+        if (root == null) {
+            return 0;
+        }
+
+        int count = 0;
+        if (root.val >= maxSoFar) {
+            count++;
+            maxSoFar = root.val;
+        }
+
+        count += dfs(root.left, maxSoFar);
+        count += dfs(root.right, maxSoFar);
+
+        return count;
+    }
+
+    public boolean isValidBST(TreeNode root) {
+        return isValid(root, null, null);
+    }
+
+    private boolean isValid(TreeNode node, Integer min, Integer max) {
+        if (node == null) {
+            return true;
+        }
+
+        if ((min != null && node.val <= min) || (max != null && node.val >= max)) {
+            return false;
+        }
+
+        return isValid(node.left, min, node.val) && isValid(node.right, node.val, max);
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         TreeNode solution = new TreeNode();
 
-        testRightSideView(solution);
+//        testRightSideView(solution);
 
 //        testLevelOrder(solution);
 
@@ -135,6 +184,10 @@ public class TreeNode {
 //        testInvertBinaryTree(solution);
 //
 //        testMaxDepth(solution);
+    }
+
+    private static void testLowestCommonAncestor(TreeNode solution) {
+
     }
 
     private static void testRightSideView(TreeNode solution) {
