@@ -1,9 +1,13 @@
 package vn.com.leetcode.binary_tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import sun.reflect.generics.tree.Tree;
+import vn.com.leetcode.linked_list.LinkedList.Node;
 
 public class TreeNode {
     int val;
@@ -169,9 +173,67 @@ public class TreeNode {
         return isValid(node.left, min, node.val) && isValid(node.right, node.val, max);
     }
 
+    int count = 0;
+    int result = -1;
+    public int kthSmallest(TreeNode root, int k) {
+        traverse(root, k);
+        return result;
+    }
+
+    public void traverse(TreeNode root, int k) {
+        if (root == null) {
+            return;
+        }
+
+        if (count >= k) {
+            return;
+        }
+
+        traverse(root.left, k);
+        count++;
+        if (count == k) {
+            result = root.val;
+            return;
+        }
+        traverse(root.right, k);
+    }
+
+
+    private int preorderIndex;
+    private Map<Integer, Integer> inorderIndexMap;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        preorderIndex = 0;
+        inorderIndexMap = new HashMap<>();
+
+        for (int i = 0; i < inorder.length; i++) {
+            inorderIndexMap.put(inorder[i], i);
+        }
+
+        return build(preorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode build(int[] preorder, int inorderStart, int inorderEnd) {
+        if (inorderStart > inorderEnd) {
+            return null;
+        }
+
+        int rootValue = preorder[preorderIndex++];
+        TreeNode root = new TreeNode(rootValue);
+        int inorderRootIndex = inorderIndexMap.get(rootValue);
+        root.left = build(preorder, inorderStart, inorderRootIndex - 1);
+        root.right = build(preorder, inorderRootIndex + 1, inorderEnd);
+
+        return root;
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         TreeNode solution = new TreeNode();
+
+        testBuildTree(solution);
+
+//        testKthSmallest(solution);
 
 //        testRightSideView(solution);
 
@@ -186,8 +248,119 @@ public class TreeNode {
 //        testMaxDepth(solution);
     }
 
-    private static void testLowestCommonAncestor(TreeNode solution) {
+    private static void testBuildTree(TreeNode solution) {
+        System.out.println("\n========== TEST BUILD TREE (PREORDER & INORDER) ==========");
 
+        // Test 1: Cây tiêu chuẩn (Giống Example 1 của đề bài)
+        //        3
+        //      /   \
+        //     9    20
+        //         /  \
+        //        15   7
+        System.out.print("Test 1 - Cây tiêu chuẩn: ");
+        TreeNode root1 = solution.buildTree(new int[]{3, 9, 20, 15, 7}, new int[]{9, 3, 15, 20, 7});
+        printTree(root1); // Kỳ vọng: [3, 9, 20, null, null, 15, 7]
+
+        // Test 2: Cây chỉ có 1 node (Example 2)
+        System.out.print("Test 2 - Cây 1 node:     ");
+        TreeNode root2 = solution.buildTree(new int[]{1}, new int[]{1});
+        printTree(root2); // Kỳ vọng: [1]
+
+        // Test 3: Cây rỗng (0 node - Edge case)
+        System.out.print("Test 3 - Cây rỗng:       ");
+        TreeNode root3 = solution.buildTree(new int[]{}, new int[]{});
+        printTree(root3); // Kỳ vọng: []
+
+        // Test 4: Cây lệch hoàn toàn sang TRÁI (Left-skewed)
+        //      1
+        //     /
+        //    2
+        //   /
+        //  3
+        System.out.print("Test 4 - Lệch TRÁI:      ");
+        TreeNode root4 = solution.buildTree(new int[]{1, 2, 3}, new int[]{3, 2, 1});
+        printTree(root4); // Kỳ vọng: in ra thấy 1 trỏ trái 2, 2 trỏ trái 3
+
+        // Test 5: Cây lệch hoàn toàn sang PHẢI (Right-skewed)
+        //  1
+        //   \
+        //    2
+        //     \
+        //      3
+        // Đặc điểm: Preorder và Inorder giống hệt nhau!
+        System.out.print("Test 5 - Lệch PHẢI:      ");
+        TreeNode root5 = solution.buildTree(new int[]{1, 2, 3}, new int[]{1, 2, 3});
+        printTree(root5);
+
+        // Test 6: Cây hoàn hảo 3 tầng (7 nodes)
+        //        1
+        //      /   \
+        //     2     3
+        //    / \   / \
+        //   4   5 6   7
+        System.out.print("Test 6 - Đầy đủ 3 tầng:  ");
+        TreeNode root6 = solution.buildTree(new int[]{1, 2, 4, 5, 3, 6, 7}, new int[]{4, 2, 5, 1, 6, 3, 7});
+        printTree(root6); // Kỳ vọng: [1, 2, 3, 4, 5, 6, 7]
+
+        // Test 7: Cây zigzag (Độ khó cao để test luồng đệ quy)
+        //    1
+        //     \
+        //      2
+        //     /
+        //    3
+        //     \
+        //      4
+        System.out.print("Test 7 - Cây zigzag:     ");
+        TreeNode root7 = solution.buildTree(new int[]{1, 2, 3, 4}, new int[]{1, 3, 4, 2});
+        printTree(root7);
+
+    }
+
+    private static void testKthSmallest(TreeNode solution) {
+        System.out.println("\n========== TEST KTH SMALLEST IN BST ==========");
+
+        // Test 1 (Example 1): [3, 1, 4, null, 2], k = 1 -> Kỳ vọng: 1
+        //      3
+        //     / \
+        //    1   4
+        //     \
+        //      2
+        TreeNode rootK1 = new TreeNode(3,
+            new TreeNode(1, null, new TreeNode(2)),
+            new TreeNode(4)
+        );
+        System.out.println("Test 1 - Tìm số nhỏ thứ 1: " + solution.kthSmallest(rootK1, 1) + " (Kỳ vọng: 1)");
+
+        solution.count = 0;
+        solution.result = -1;
+
+        // Test 2 (Example 2): [5, 3, 6, 2, 4, null, null, 1], k = 3 -> Kỳ vọng: 3
+        //          5
+        //         / \
+        //        3   6
+        //       / \
+        //      2   4
+        //     /
+        //    1
+        TreeNode rootK2 = new TreeNode(5,
+            new TreeNode(3, new TreeNode(2, new TreeNode(1), null), new TreeNode(4)),
+            new TreeNode(6)
+        );
+        System.out.println("Test 2 - Tìm số nhỏ thứ 3: " + solution.kthSmallest(rootK2, 3) + " (Kỳ vọng: 3)");
+
+        solution.count = 0;
+        solution.result = -1;
+
+        // Test 3: Cây chỉ có nhánh phải [1, null, 2, null, 3], k = 3 -> Kỳ vọng: 3 (Số lớn nhất)
+        TreeNode rootK3 = new TreeNode(1, null, new TreeNode(2, null, new TreeNode(3)));
+        System.out.println("Test 3 - Tìm số nhỏ thứ 3: " + solution.kthSmallest(rootK3, 3) + " (Kỳ vọng: 3)");
+
+        solution.count = 0;
+        solution.result = -1;
+
+        // Test 4: Cây chỉ có 1 node [10], k = 1 -> Kỳ vọng: 10
+        TreeNode rootK4 = new TreeNode(10);
+        System.out.println("Test 4 - Tìm số nhỏ thứ 1 (Cây 1 node): " + solution.kthSmallest(rootK4, 1) + " (Kỳ vọng: 10)");
     }
 
     private static void testRightSideView(TreeNode solution) {
