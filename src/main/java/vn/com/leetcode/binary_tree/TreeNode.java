@@ -227,11 +227,33 @@ public class TreeNode {
         return root;
     }
 
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        } else if (p != null && q != null){
+            if (p.val == q.val) {
+                return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if (root == null) return false;
+
+        return isSameTree(root, subRoot) ||
+                isSubtree(root.left, subRoot) ||
+                isSubtree(root.right, subRoot);
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         TreeNode solution = new TreeNode();
 
-        testBuildTree(solution);
+//        testBuildTree(solution);
 
 //        testKthSmallest(solution);
 
