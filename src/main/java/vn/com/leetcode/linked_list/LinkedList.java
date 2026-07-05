@@ -1,8 +1,5 @@
 package vn.com.leetcode.linked_list;
 
-import java.util.List;
-import jdk.nashorn.internal.ir.LiteralNode;
-
 public class LinkedList {
 
     public ListNode reverseList(ListNode head) {
