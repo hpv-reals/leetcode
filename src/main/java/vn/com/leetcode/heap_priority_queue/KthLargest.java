@@ -1,6 +1,7 @@
 package vn.com.leetcode.heap_priority_queue;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 public class KthLargest {
@@ -86,6 +87,22 @@ public class KthLargest {
             return 0;
         }
         return pq.poll();
+    }
+
+    public int leastInterval(char[] tasks, int n) {
+        int[] countArray = new int[26];
+        int maxFreq = 0;
+        for (char task : tasks) {
+            countArray[task - 'A']++;
+            maxFreq = Math.max(maxFreq, countArray[task - 'A']);
+        }
+
+        int maxCount = 0;
+        for (int freq : countArray) {
+            if (freq == maxFreq) maxCount++;
+        }
+
+        return Math.max(tasks.length, (maxFreq - 1) * (n + 1) + maxCount);
     }
 
     public static void main(String[] args) {
