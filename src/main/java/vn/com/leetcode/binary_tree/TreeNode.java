@@ -1,10 +1,12 @@
 package vn.com.leetcode.binary_tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 
 public class TreeNode {
@@ -153,6 +155,63 @@ public class TreeNode {
         count += dfs(root.right, maxSoFar);
 
         return count;
+    }
+
+    int maxGlobal = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        maxGlobal = Integer.MIN_VALUE;
+        maxValue(root);
+        return maxGlobal;
+    }
+
+    public int maxValue(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftValue = Math.max(0, maxValue(root.left));
+        int rightValue = Math.max(0, maxValue(root.right));
+        int currentValue = root.val + leftValue + rightValue;
+        maxGlobal = Math.max(currentValue, maxGlobal);
+        return root.val + Math.max(leftValue, rightValue);
+    }
+
+    final String splitter = ",";
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        serializeHelper(root, sb);
+        return sb.toString();
+    }
+
+    public void serializeHelper(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("null").append(splitter);
+            return;
+        }
+        sb.append(node.val).append(splitter);
+        serializeHelper(node.left, sb);
+        serializeHelper(node.right, sb);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        Queue<String> queues = new LinkedList<>(Arrays.asList(data.split(splitter)));
+        return deserializeHelper(queues);
+    }
+
+    public TreeNode deserializeHelper(Queue<String> queue) {
+        String value = queue.poll();
+        if (Objects.equals(value, "null")) {
+            return null;
+        }
+
+        TreeNode treeNode = new TreeNode(Integer.parseInt(value));
+        treeNode.left = deserializeHelper(queue);
+        treeNode.right = deserializeHelper(queue);
+        return treeNode;
     }
 
     public boolean isValidBST(TreeNode root) {
