@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import sun.reflect.generics.tree.Tree;
 
 public class TreeNode {
     int val;
@@ -304,6 +305,120 @@ public class TreeNode {
         return isSameTree(root, subRoot) ||
                 isSubtree(root.left, subRoot) ||
                 isSubtree(root.right, subRoot);
+    }
+
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+
+        inorderTraversal(root, result);
+
+        return result;
+    }
+
+    public void inorderTraversal(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        inorderTraversal(root.left, result);
+        result.add(root.val);
+        inorderTraversal(root.right, result);
+    }
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+
+        preorderTraversal(root, result);
+
+        return result;
+    }
+
+    public void preorderTraversal(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+
+        result.add(node.val);
+        preorderTraversal(node.left, result);
+        preorderTraversal(node.right, result);
+    }
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+
+        postorderTraversal(root, result);
+
+        return result;
+    }
+
+    public void postorderTraversal(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+
+        postorderTraversal(node.left, result);
+        postorderTraversal(node.right, result);
+        result.add(node.val);
+    }
+
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) {
+            return null;
+        }
+
+        if (root1 == null) {
+            root1 = new TreeNode();
+        }
+        if (root2 == null) {
+            root2 = new TreeNode();
+        }
+
+        return new TreeNode(root1.val + root2.val, mergeTrees(root1.left, root2.left), mergeTrees(root1.right, root2.right) );
+    }
+
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+
+        if (root.left == null && root.right == null) {
+            return targetSum == root.val;
+        }
+
+        return hasPathSum(root.left, targetSum - root.val)
+            || hasPathSum(root.right, targetSum - root.val);
+    }
+
+    public int minusSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return targetSum;
+        }
+
+        targetSum -= root.val;
+        int targetSumTempLeft = targetSum;
+        int targetSumTempRight = targetSum;
+
+        int left = minusSum(root.left, targetSumTempLeft);
+        if (left == 0) {
+            return 0;
+        }
+        return minusSum(root.right, targetSumTempRight);
+    }
+
+    int sumRangeSumBST = 0;
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        if (root == null) {
+            return sumRangeSumBST;
+        }
+
+        if (root.val >= low && root.val <= high) {
+            sumRangeSumBST += root.val;
+        }
+
+        rangeSumBST(root.left, low, high);
+        rangeSumBST(root.right, low, high);
+
+        return sumRangeSumBST;
     }
 
     // --- HÀM MAIN ---
