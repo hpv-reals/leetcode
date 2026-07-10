@@ -125,7 +125,7 @@ public class TreeNode {
         return output;
     }
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
         while (root != null) {
             if (root.val > p.val && root.val > q.val) {
                 root = root.left;
@@ -419,6 +419,36 @@ public class TreeNode {
         rangeSumBST(root.right, low, high);
 
         return sumRangeSumBST;
+    }
+
+    public boolean evaluateTree(TreeNode root) {
+        if(root.val == 0) {
+            return false;
+        }
+        if(root.val == 1) {
+            return true;
+        }
+
+        if(root.val == 2) {
+            return evaluateTree(root.left) || evaluateTree(root.right);
+        }
+
+        return evaluateTree(root.left) && evaluateTree(root.right);
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+
+        TreeNode leftSide = lowestCommonAncestor(root.left, p, q);
+        TreeNode rightSide = lowestCommonAncestor(root.right, p, q);
+
+        if (leftSide != null && rightSide != null) {
+            return root;
+        }
+
+        return leftSide != null ? leftSide : rightSide;
     }
 
     // --- HÀM MAIN ---
