@@ -50,7 +50,7 @@ public class BinarySearch {
             return x;
         }
         int left = 0, right = x;
-        int result;
+        int result = 0;
 
         while (left <= right) {
             int mid = left + (right - left)/2;
@@ -67,10 +67,6 @@ public class BinarySearch {
             }
         }
         return result;
-    }
-
-    public int shipWithinDays(int[] weights, int days) {
-
     }
 
     /**
