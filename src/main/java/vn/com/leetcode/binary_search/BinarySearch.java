@@ -45,6 +45,34 @@ public class BinarySearch {
         return left;
     }
 
+    public int mySqrt(int x) {
+        if (x == 0 | x == 1) {
+            return x;
+        }
+        int left = 0, right = x;
+        int result;
+
+        while (left <= right) {
+            int mid = left + (right - left)/2;
+
+            if (mid * mid == x) {
+                return mid;
+            }
+
+            if ((long) mid * mid < (long) x) {
+                result = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return result;
+    }
+
+    public int shipWithinDays(int[] weights, int days) {
+
+    }
+
     /**
      * Level: Medium
      * Start: 16:50 21/06/2026
