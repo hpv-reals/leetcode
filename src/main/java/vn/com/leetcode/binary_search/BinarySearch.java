@@ -7,7 +7,7 @@ public class BinarySearch {
      * Start: 16:37 21/06/2026
      * End: 16:48 21/06/2026
      */
-    public int search(int[] nums, int target) {
+    public int search1(int[] nums, int target) {
         int result = -1;
 
         int left = 0,  right = nums.length - 1;
@@ -25,6 +25,39 @@ public class BinarySearch {
         }
 
         return result;
+    }
+
+    public boolean search(int[] nums, int target) {
+
+        int left = 0,  right = nums.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int value = nums[mid];
+            if (value == target) {
+                return true;
+            }
+
+            if (nums[left] == value && value == nums[right]){
+                left++;
+                right--;
+            }
+             else if (nums[left] <= value) {
+                if (nums[left] <= target && target < nums[right]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (value < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+
+        return false;
     }
 
 
@@ -85,7 +118,7 @@ public class BinarySearch {
             int firstValue = numbs[0];
             int lastValue = numbs[numbs.length - 1];
             if (target >= firstValue && target <= lastValue) {
-                return search(numbs, target) != -1;
+                return search1(numbs, target) != -1;
             } else if (target > lastValue) {
                 left = mid + 1;
             } else  {
