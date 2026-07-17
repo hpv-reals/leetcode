@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
-import sun.reflect.generics.tree.Tree;
 
 public class TreeNode {
     int val;
@@ -451,9 +450,52 @@ public class TreeNode {
         return leftSide != null ? leftSide : rightSide;
     }
 
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if (root == null) {
+            return new TreeNode(val);
+        }
+        if (val < root.val) {
+            root.left = insertIntoBST(root.left, val);
+        } else {
+            root.right = insertIntoBST(root.right, val);
+        }
+        return root;
+    }
+
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+        if (key == root.val) {
+            if (root.left == null) {
+                return root.right;
+            }
+            if (root.right == null) {
+                return root.left;
+            }
+
+            root.val = findMin(root.right);
+            root.right = deleteNode(root.right, root.val);
+        } else if (key < root.val) {
+            root.left = deleteNode(root.left, key);
+        } else {
+            root.right = deleteNode(root.right, key);
+        }
+        return root;
+    }
+
+    private int findMin(TreeNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node.val;
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         TreeNode solution = new TreeNode();
+
+        testInsertIntoBST(solution);
 
 //        testBuildTree(solution);
 
@@ -471,6 +513,55 @@ public class TreeNode {
 //
 //        testMaxDepth(solution);
     }
+
+    public static void printInOrder(TreeNode node) {
+        if (node == null) return;
+        printInOrder(node.left);
+        System.out.print(node.val + " ");
+        printInOrder(node.right);
+    }
+
+    private static void testInsertIntoBST(TreeNode sol) {
+// Test Case 1: Chèn vào cây có sẵn (Ví dụ 1)
+        TreeNode root1 = new TreeNode(5);
+        root1.left = new TreeNode(3); root1.right = new TreeNode(9);
+        root1.left.left = new TreeNode(1); root1.left.right = new TreeNode(4);
+        System.out.print("Test 1 (Original 1 3 4 5 9) -> Insert 6: ");
+        sol.insertIntoBST(root1, 6);
+        printInOrder(root1); // Kết quả mong đợi: 1 3 4 5 6 9
+        System.out.println();
+
+        // Test Case 2: Chèn vào cây rỗng
+        TreeNode root2 = null;
+        System.out.print("Test 2 (Empty) -> Insert 5: ");
+        root2 = sol.insertIntoBST(root2, 5);
+        printInOrder(root2); // Kết quả mong đợi: 5
+        System.out.println();
+
+        // Test Case 3: Chèn vào cây chỉ có 1 node
+        TreeNode root3 = new TreeNode(10);
+        System.out.print("Test 3 (Original 10) -> Insert 5: ");
+        sol.insertIntoBST(root3, 5);
+        printInOrder(root3); // Kết quả mong đợi: 5 10
+        System.out.println();
+
+        // Test Case 4: Chèn giá trị rất nhỏ vào cây đã có
+        TreeNode root4 = new TreeNode(20);
+        root4.left = new TreeNode(10);
+        System.out.print("Test 4 (Original 10 20) -> Insert 1: ");
+        sol.insertIntoBST(root4, 1);
+        printInOrder(root4); // Kết quả mong đợi: 1 10 20
+        System.out.println();
+
+        // Test Case 5: Chèn giá trị lớn vào cây đã có
+        TreeNode root5 = new TreeNode(2);
+        root5.right = new TreeNode(5);
+        System.out.print("Test 5 (Original 2 5) -> Insert 8: ");
+        sol.insertIntoBST(root5, 8);
+        printInOrder(root5); // Kết quả mong đợi: 2 5 8
+        System.out.println();
+    }
+
 
     private static void testBuildTree(TreeNode solution) {
         System.out.println("\n========== TEST BUILD TREE (PREORDER & INORDER) ==========");
