@@ -140,6 +140,62 @@ public class TwoPointerSolution {
         System.arraycopy(result, 0, nums, 0, length);
     }
 
+    public int trap(int[] height) {
+        if (height == null || height.length == 0) {
+            return 0;
+        }
+        int totalWater = 0;
+        int left = 0;
+        int right = height.length - 1;
+        int maxLeft = 0;
+        int maxRight = 0;
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= maxLeft) {
+                    maxLeft = height[left];
+                } else {
+                    totalWater += maxLeft - height[left];
+                }
+                left++;
+            } else {
+                if (height[right] >= maxRight) {
+                    maxRight = height[right];
+                } else {
+                    totalWater += maxRight - height[right];
+                }
+                right--;
+            }
+        }
+
+        return totalWater;
+    }
+
+    public int numRescueBoats(int[] people, int limit) {
+        Arrays.sort(people);
+        int left = 0;
+        int right = people.length - 1;
+        int total = 0;
+
+        while (left < right) {
+            if (people[right] > limit) {
+                right--;
+            } else if (people[right] == limit) {
+                total++;
+                right--;
+            } else {
+                if (people[right] + people[left] <= limit) {
+                    left++;
+                }
+                total++;
+                right--;
+            }
+        }
+        if (left == right) {
+            total++;
+        }
+        return total;
+    }
+
     public static void main(String[] args) {
         TwoPointerSolution sol = new TwoPointerSolution();
 
