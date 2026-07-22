@@ -114,24 +114,35 @@ public class SolutionStack {
         return result;
     }
 
+    public int carFleet(int target, int[] position, int[] speed) {
+        int n = position.length;
+        if (n == 0) return 0;
+
+        double[][] cars = new double[n][2];
+        for (int i = 0; i < n; i++) {
+            cars[i][0] = position[i];
+            cars[i][1] = speed[i];
+        }
+
+        Arrays.sort(cars, (a, b) -> Double.compare(a[0], b[0]));
+
+        double lastTime = 0.0;
+        int fleetNumber = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            double time = ((double) target - cars[i][0])/cars[i][1];
+            if (time > lastTime) {
+                fleetNumber++;
+                lastTime = time;
+            }
+        }
+        return fleetNumber;
+    }
+
     public static void main(String[] args) {
         SolutionStack sol = new SolutionStack();
-        // Định nghĩa các test case
-        int[][] testCases = {
-            {73, 74, 75, 71, 69, 72, 76, 73}, // Test 1: Tổng quát
-            {30, 40, 50, 60},                 // Test 2: Tăng dần
-            {30, 60, 90},                     // Test 3: Nhảy vọt
-            {89, 62, 70, 58, 47, 47, 46, 76}, // Test 4: Nhiều giá trị nhỏ
-            {55, 38, 53, 81, 61, 93, 97, 34}  // Test 5: Hỗn hợp
-        };
 
-        // Chạy kiểm thử và in kết quả
-        for (int i = 0; i < testCases.length; i++) {
-            int[] result = sol.dailyTemperatures(testCases[i]);
-            System.out.println("Test " + (i + 1) + ": " + Arrays.toString(testCases[i]));
-            System.out.println("Result: " + Arrays.toString(result));
-            System.out.println("-----------------------------------");
-        }
+        System.out.println(sol.carFleet(10, new int[]{1, 4}, new int[]{3, 2}));
+        System.out.println(sol.carFleet(10, new int[]{4, 1, 0, 7}, new int[]{2, 2, 1, 1}));
     }
 
 }
