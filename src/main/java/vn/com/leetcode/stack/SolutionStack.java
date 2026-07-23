@@ -1,6 +1,7 @@
 package vn.com.leetcode.stack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -138,11 +139,78 @@ public class SolutionStack {
         return fleetNumber;
     }
 
+    public String simplifyPath(String path) {
+        if (path.length() <= 0 || path.equals("/.")) {
+            return "/";
+        }
+
+        while (path.contains("//") || path.contains("/./") ) {
+            path = path.replaceAll("//", "/");
+            path = path.replaceAll("/\\./", "//");
+        }
+        Stack<String> stack  = new Stack<>();
+        String[] arrayString = path.substring(1).split("/");
+        for (String str : arrayString) {
+            if (str.equals("..")) {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else {
+                stack.push(str);
+            }
+        }
+        if (stack.isEmpty()) {
+            return "/";
+        }
+        Collections.reverse(stack);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("/");
+        while (!stack.isEmpty()) {
+            stringBuilder.append(stack.pop()).append("/");
+        }
+
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
+    }
+
+    public String decodeString(String s) {
+        Stack<Integer> countStack = new Stack<>();
+        Stack<String> stringStack = new Stack<>();
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;
+        int index = 0;
+        while (index < s.length()) {
+            char x = s.charAt(index);
+            if (x >= 48 && x <= 57) {
+                k = k * 10 + (x - '0');
+            } else if (x >= 97 && x <= 122) {
+                currentString.append(x);
+            } else if (x == '[') {
+                countStack.push(k);
+                k = 0;
+                stringStack.push(currentString.toString());
+                currentString = new StringBuilder();
+            } else if (x == ']') {
+                int count = countStack.pop();
+                String strPrevious = stringStack.pop();
+                StringBuilder temp = new StringBuilder();
+                while (count > 0) {
+                    temp.append(currentString);
+                    count--;
+                }
+                currentString = new StringBuilder();
+                currentString.append(strPrevious).append(temp);
+            }
+            index++;
+        }
+        return currentString.toString();
+    }
+
     public static void main(String[] args) {
         SolutionStack sol = new SolutionStack();
 
-        System.out.println(sol.carFleet(10, new int[]{1, 4}, new int[]{3, 2}));
-        System.out.println(sol.carFleet(10, new int[]{4, 1, 0, 7}, new int[]{2, 2, 1, 1}));
+        System.out.println(sol.decodeString("2[a3[b]]c"));
+        System.out.println(sol.decodeString("axb3[z]4[c]"));
+        System.out.println(sol.decodeString("ab2[c]3[d]1[x]"));
     }
 
 }
