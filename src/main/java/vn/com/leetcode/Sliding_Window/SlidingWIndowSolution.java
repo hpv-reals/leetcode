@@ -1,10 +1,6 @@
 package vn.com.leetcode.Sliding_Window;
 
-import javax.swing.plaf.InsetsUIResource;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SlidingWIndowSolution {
 
@@ -54,6 +50,54 @@ public class SlidingWIndowSolution {
         }
 
         return result;
+    }
+
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) {
+            return "";
+        }
+
+        int[] need = new int[128];
+        for (char c : t.toCharArray()) {
+            need[c]++;
+        }
+
+        int left = 0, right = 0;
+        int required = t.length();
+        int minLen = Integer.MAX_VALUE;
+        int start = 0;
+
+        while (right < s.length()) {
+            char cRight = s.charAt(right);
+
+            if (need[cRight] > 0) {
+                required--;
+            }
+            need[cRight]--;
+            right++;
+
+            while (required == 0) {
+                if (right - left < minLen) {
+                    minLen = right - left;
+                    start = left;
+                }
+
+                char cLeft = s.charAt(left);
+                need[cLeft]++;
+
+                if (need[cLeft] > 0) {
+                    required++;
+                }
+                left++;
+            }
+        }
+
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+    }
+
+    public static void main(String[] args) {
+        SlidingWIndowSolution solution = new SlidingWIndowSolution();
+        System.out.println(solution.minWindow("OUZODYXAZV", "XYZ"));
     }
 
 }
