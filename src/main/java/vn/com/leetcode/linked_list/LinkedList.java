@@ -1,5 +1,7 @@
 package vn.com.leetcode.linked_list;
 
+import java.util.List;
+
 public class LinkedList {
 
     public ListNode reverseList(ListNode head) {
@@ -222,6 +224,32 @@ public class LinkedList {
         return dummy.next;
     }
 
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if (head == null || left == right) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+
+        for (int i = 0; i < left - 1; i++) {
+            prev = prev.next;
+        }
+
+        ListNode curr = prev.next;
+        ListNode nextNode;
+
+        for (int i = 0; i < right - left; i++) {
+            nextNode = curr.next;
+            curr.next = nextNode.next;
+            nextNode.next = prev.next;
+            prev.next = nextNode;
+        }
+
+        return dummy.next;
+    }
+
     public static class Node {
         int val;
         Node next;
@@ -244,12 +272,33 @@ public class LinkedList {
 
     // --- HÀM MAIN ---
     public static void main(String[] args) {
-        LinkedList solution = new LinkedList();
+        LinkedList solver = new LinkedList();
 
-        // Test case 1: Xóa node bình thường ở giữa
-        ListNode rmList1 = createList(new int[]{9,9,9,9,9,9,9});
-        ListNode rmList2 = createList(new int[]{9,9,9,9});
-        printList(solution.addTwoNumbers(rmList1, rmList2));
+
+        // Test Case 1
+        ListNode head1 = arrayToList(new int[]{1, 2, 3, 4, 5});
+        ListNode res1 = solver.reverseBetween(head1, 2, 4);
+        System.out.println("Test 1 Result: " + java.util.Arrays.toString(listToArray(res1)));
+
+        // Test Case 2
+        ListNode head2 = arrayToList(new int[]{5});
+        ListNode res2 = solver.reverseBetween(head2, 1, 1);
+        System.out.println("Test 2 Result: " + java.util.Arrays.toString(listToArray(res2)));
+
+        // Test Case 3
+        ListNode head3 = arrayToList(new int[]{3, 5});
+        ListNode res3 = solver.reverseBetween(head3, 1, 2);
+        System.out.println("Test 3 Result: " + java.util.Arrays.toString(listToArray(res3)));
+
+        // Test Case 4
+        ListNode head4 = arrayToList(new int[]{1, 2, 3, 4});
+        ListNode res4 = solver.reverseBetween(head4, 1, 4);
+        System.out.println("Test 4 Result: " + java.util.Arrays.toString(listToArray(res4)));
+
+        // Test Case 5
+        ListNode head5 = arrayToList(new int[]{1, 2, 3, 4, 5, 6});
+        ListNode res5 = solver.reverseBetween(head5, 3, 5);
+        System.out.println("Test 5 Result: " + java.util.Arrays.toString(listToArray(res5)));
 
 
     }
@@ -264,6 +313,28 @@ public class LinkedList {
             current = current.next;
         }
         return head;
+    }
+
+    private static int[] listToArray(ListNode head) {
+        java.util.List<Integer> list = new java.util.ArrayList<>();
+        while (head != null) {
+            list.add(head.val);
+            head = head.next;
+        }
+        int[] arr = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
+        return arr;
+    }
+
+    private static ListNode arrayToList(int[] arr) {
+        if (arr == null || arr.length == 0) return null;
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        for (int val : arr) {
+            curr.next = new ListNode(val);
+            curr = curr.next;
+        }
+        return dummy.next;
     }
 
     // 2. Hàm in LinkedList ra màn hình

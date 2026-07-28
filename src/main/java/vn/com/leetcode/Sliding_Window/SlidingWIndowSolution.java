@@ -1,6 +1,7 @@
 package vn.com.leetcode.Sliding_Window;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SlidingWIndowSolution {
 
@@ -95,9 +96,38 @@ public class SlidingWIndowSolution {
         return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
     }
 
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Map<Integer, List<Integer>> countMap = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            List<Integer> listCount =  countMap.get(nums[i]);
+            if (listCount == null || listCount.isEmpty()) {
+                listCount = new ArrayList<>();
+            }
+            listCount.add(i);
+            countMap.put(nums[i], listCount);
+            set.add(nums[i]);
+        }
+
+        for (Integer num : set) {
+            List<Integer> listIndex = countMap.get(num);
+            if (listIndex.size() >= 2) {
+                Arrays.sort(listIndex.toArray());
+                int index = 0;
+                while (index < listIndex.size() - 1) {
+                    if (listIndex.get(index + 1) - listIndex.get(index) <= k){
+                        return true;
+                    }
+                    index++;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         SlidingWIndowSolution solution = new SlidingWIndowSolution();
-        System.out.println(solution.minWindow("OUZODYXAZV", "XYZ"));
+        System.out.println(solution.containsNearbyDuplicate(new int[]{1,0,1,1}, 1));
     }
 
 }
