@@ -205,12 +205,53 @@ public class SolutionStack {
         return currentString.toString();
     }
 
+    public int largestRectangleArea(int[] heights) {
+        int maxArea = 0;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i <= heights.length; i++) {
+            int h;
+            if (i == heights.length) {
+                h = 0;
+            } else {
+                h = heights[i];
+            }
+
+            while (!stack.isEmpty() && h < heights[stack.peek()]) {
+                int width;
+                int currentIndex = stack.pop();
+                if (stack.isEmpty()) {
+                    width = i;
+                } else {
+                    width = i - stack.peek() - 1;
+                }
+                maxArea = Math.max(maxArea, heights[currentIndex] * width);
+            }
+            stack.push(i);
+        }
+        return maxArea;
+    }
+
     public static void main(String[] args) {
         SolutionStack sol = new SolutionStack();
+        // Test Case 1: Ví dụ cơ bản từ đề bài
+        int[] heights1 = {7, 1, 7, 2, 2, 4};
+        System.out.println("Test 1 Result: " + sol.largestRectangleArea(heights1)); // Expected output: 8
 
-        System.out.println(sol.decodeString("2[a3[b]]c"));
-        System.out.println(sol.decodeString("axb3[z]4[c]"));
-        System.out.println(sol.decodeString("ab2[c]3[d]1[x]"));
+        // Test Case 2: Mảng tăng dần
+        int[] heights2 = {1, 3, 7};
+        System.out.println("Test 2 Result: " + sol.largestRectangleArea(heights2)); // Expected output: 7
+
+        // Test Case 3: Mảng giảm dần
+        int[] heights3 = {5, 4, 3, 2, 1};
+        System.out.println("Test 3 Result: " + sol.largestRectangleArea(heights3)); // Expected output: 9
+
+        // Test Case 4: Các cột có chiều cao bằng nhau
+        int[] heights4 = {2, 2, 2, 2};
+        System.out.println("Test 4 Result: " + sol.largestRectangleArea(heights4)); // Expected output: 8
+
+        // Test Case 5: Mảng có chứa giá trị 0
+        int[] heights5 = {2, 1, 5, 6, 2, 3};
+        System.out.println("Test 5 Result: " + sol.largestRectangleArea(heights5)); // Expected output: 10
     }
 
 }
