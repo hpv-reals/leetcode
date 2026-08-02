@@ -1,5 +1,6 @@
 package vn.com.leetcode.Arrays_Hashing;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -66,10 +67,39 @@ public class ArraySolution {
         return result;
     }
 
+    public void sortColors(int[] nums) {
+        int left = 0, mid = 0, right = nums.length - 1;
+        while (mid <= right) {
+            if (nums[mid] == 0) {
+                int temp = nums[left];
+                nums[left] = nums[mid];
+                nums[mid] = temp;
+                left++;
+                mid++;
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else {
+                int temp = nums[right];
+                nums[right] = nums[mid];
+                nums[mid] = temp;
+                right--;
+            }
+        }
+    }
+
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length - 1;
+        if (nums[n] == nums[n/2]) {
+            return nums[n];
+        }
+
+        return nums[0];
+    }
+
     public static void main(String[] args) {
         ArraySolution solution = new ArraySolution();
-        int[] array  =new int[]{5,10,2,1,3};
-        int[] array2 = solution.sortArray(array);
-        System.out.println("");
+        int[] array  =new int[]{1,2,3,2,2,2,5,4,2};
+        System.out.println(solution.majorityElement(array));
     }
 }
