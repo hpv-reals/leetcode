@@ -96,9 +96,33 @@ public class ArraySolution {
         return nums[0];
     }
 
+    public int maxProfit(int[] prices) {
+        int buy = prices[0];
+        int sell = 1;
+        int sum = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] <= buy) {
+                buy = prices[i];
+                sell = prices[i];
+            } else {
+                while (i< prices.length && sell <= prices[i]) {
+                    sell = prices[i];
+                    i++;
+                }
+                sum += sell - buy;
+                if (i > prices.length - 1) {
+                    return sum;
+                }
+                buy = prices[i];
+                sell = prices[i];
+            }
+        }
+        return sum;
+    }
+
     public static void main(String[] args) {
         ArraySolution solution = new ArraySolution();
-        int[] array  =new int[]{1,2,3,2,2,2,5,4,2};
-        System.out.println(solution.majorityElement(array));
+        int[] array  =new int[]{1,2,3,4,5};
+        System.out.println(solution.maxProfit(array));
     }
 }
