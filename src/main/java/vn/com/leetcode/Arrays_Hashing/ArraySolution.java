@@ -1,6 +1,8 @@
 package vn.com.leetcode.Arrays_Hashing;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 public class ArraySolution {
@@ -118,6 +120,26 @@ public class ArraySolution {
             }
         }
         return sum;
+    }
+
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int currentSum = 0;
+
+        Map<Integer, Integer> prefixSumCount = new HashMap<>();
+
+        prefixSumCount.put(0, 1);
+
+        for (int num : nums) {
+            currentSum += num;
+            int neededSum = currentSum - k;
+            if (prefixSumCount.containsKey(neededSum)) {
+                count += prefixSumCount.get(neededSum);
+            }
+            prefixSumCount.put(currentSum, prefixSumCount.getOrDefault(currentSum, 0) + 1);
+        }
+
+        return count;
     }
 
     public static void main(String[] args) {
