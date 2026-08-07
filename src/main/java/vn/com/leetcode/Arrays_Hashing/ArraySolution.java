@@ -1,7 +1,9 @@
 package vn.com.leetcode.Arrays_Hashing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -88,15 +90,15 @@ public class ArraySolution {
         }
     }
 
-    public int majorityElement(int[] nums) {
-        Arrays.sort(nums);
-        int n = nums.length - 1;
-        if (nums[n] == nums[n/2]) {
-            return nums[n];
-        }
-
-        return nums[0];
-    }
+//    public int majorityElement(int[] nums) {
+//        Arrays.sort(nums);
+//        int n = nums.length - 1;
+//        if (nums[n] == nums[n/2]) {
+//            return nums[n];
+//        }
+//
+//        return nums[0];
+//    }
 
     public int maxProfit(int[] prices) {
         int buy = prices[0];
@@ -140,6 +142,22 @@ public class ArraySolution {
         }
 
         return count;
+    }
+
+    public List<Integer> majorityElement(int[] nums) {
+        int length = nums.length;
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > length/3) {
+                list.add(entry.getKey());
+            }
+        }
+        return list;
     }
 
     public static void main(String[] args) {
