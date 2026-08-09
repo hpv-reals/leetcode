@@ -90,16 +90,6 @@ public class ArraySolution {
         }
     }
 
-//    public int majorityElement(int[] nums) {
-//        Arrays.sort(nums);
-//        int n = nums.length - 1;
-//        if (nums[n] == nums[n/2]) {
-//            return nums[n];
-//        }
-//
-//        return nums[0];
-//    }
-
     public int maxProfit(int[] prices) {
         int buy = prices[0];
         int sell = 1;
@@ -144,21 +134,35 @@ public class ArraySolution {
         return count;
     }
 
-    public List<Integer> majorityElement(int[] nums) {
+    public int majorityElement(int[] nums) {
         int length = nums.length;
-        List<Integer> list = new ArrayList<>();
         Map<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
-        }
-
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            if (entry.getValue() > length/3) {
-                list.add(entry.getKey());
+            int current = map.getOrDefault(num, 0);
+            current++;
+            map.put(num, current);
+            if (current > length / 2) {
+                return num;
             }
         }
-        return list;
+        return 0;
     }
+
+//    public List<Integer> majorityElement(int[] nums) {
+//        int length = nums.length;
+//        List<Integer> list = new ArrayList<>();
+//        Map<Integer, Integer> map = new HashMap<>();
+//        for (int num : nums) {
+//            map.put(num, map.getOrDefault(num, 0) + 1);
+//        }
+//
+//        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+//            if (entry.getValue() > length/3) {
+//                list.add(entry.getKey());
+//            }
+//        }
+//        return list;
+//    }
 
     public static void main(String[] args) {
         ArraySolution solution = new ArraySolution();
