@@ -491,11 +491,27 @@ public class TreeNode {
         return node.val;
     }
 
+    public TreeNode removeLeafNodes(TreeNode root, int target) {
+        if (root == null) {
+            return null;
+        }
+
+        root.left = removeLeafNodes(root.left, target);
+        root.right = removeLeafNodes(root.right, target);
+
+        if (root.left == null && root.right == null && root.val == target) {
+            return null;
+        }
+        return root;
+    }
+
     // --- HÀM MAIN ---
     public static void main(String[] args) {
         TreeNode solution = new TreeNode();
 
-        testInsertIntoBST(solution);
+        testRemoveLeafNodes(solution);
+
+//        testInsertIntoBST(solution);
 
 //        testBuildTree(solution);
 
@@ -519,6 +535,37 @@ public class TreeNode {
         printInOrder(node.left);
         System.out.print(node.val + " ");
         printInOrder(node.right);
+    }
+
+    private static void testRemoveLeafNodes(TreeNode sol) {
+        System.out.println("--- Test Case 1 ---");
+        TreeNode root1 = new TreeNode(1,
+            new TreeNode(2, new TreeNode(2), null),
+            new TreeNode(3, new TreeNode(2), new TreeNode(4))
+        );
+        TreeNode res1 = sol.removeLeafNodes(root1, 2);
+        printTree(res1);
+
+        System.out.println("\n--- Test Case 2 ---");
+        TreeNode root2 = new TreeNode(3, null, new TreeNode(3, new TreeNode(3), null));
+        TreeNode res2 = sol.removeLeafNodes(root2, 3);
+        printTree(res2);
+
+        System.out.println("\n--- Test Case 3 ---");
+        // Tree: 1 -> left: 2 -> left: 2
+        TreeNode root3 = new TreeNode(1, new TreeNode(2, new TreeNode(2), null), null);
+        TreeNode res3 = sol.removeLeafNodes(root3, 2);
+        printTree(res3);
+
+        System.out.println("\n--- Test Case 4 ---");
+        TreeNode root4 = new TreeNode(5);
+        TreeNode res4 = sol.removeLeafNodes(root4, 5);
+        printTree(res4);
+
+        System.out.println("\n--- Test Case 5 ---");
+        TreeNode root5 = new TreeNode(1, new TreeNode(2), new TreeNode(3));
+        TreeNode res5 = sol.removeLeafNodes(root5, 5);
+        printTree(res5);
     }
 
     private static void testInsertIntoBST(TreeNode sol) {
